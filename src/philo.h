@@ -42,5 +42,5 @@ typedef struct s_table
 	size_t			size; // there are as many forks as philosophers
 } t_table;
 
-// t_table ft_init(t_intervals, size_t);
+t_table ft_alloc(const t_intervals, size_t);
 //: }}}
