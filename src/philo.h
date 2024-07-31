@@ -43,4 +43,5 @@ typedef struct s_table
 } t_table;
 
 t_table ft_alloc(const t_intervals, size_t);
+void ft_init(t_table *table);
 //: }}}
