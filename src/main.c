@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Usage: %s number_of_philosophers time_to_die time_to_eat time_to_sleep\n", argv[0]);
 		return 1;
 	}
-	// intervals.timestamp = get_current_timestamp();
+	intervals.start = get_current_time();
 	intervals.die = (time_t) atol(argv[2]);
 	intervals.eat = (time_t) atol(argv[3]);
 	intervals.sleep = (time_t) atol(argv[4]);

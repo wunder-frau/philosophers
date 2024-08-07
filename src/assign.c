@@ -42,30 +42,30 @@ static pthread_mutex_t	*allocate_mutexes(const size_t size)
 	return mutexes;
 }
 
-t_philo	*allocate_philos(const size_t size, t_locks	*locks)
-{
-	t_philo	*philos;
-	size_t i;
+t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals intervals) {
+    t_philo *philos;
+    size_t i;
 
-	philos = malloc(size * sizeof(t_philo));
-	if (!philos)
-		return (NULL);
-	i = 0;
-	while (i < size)
-	{
-		philos[i].id = i;
-		// philos[i].intervals = intervals;
-		philos[i].action = THINK;
-		//TODO: philos[i].thread = ?;
-		//TODO: philos[i].state = ?;
-		philos[i].left = NULL;
-		philos[i].right = NULL;
-		philos[i].locks = locks;
-		printf("Initialized philosopher %zu with ID %zu\n", i, philos[i].id);
-		++i;
-	}
-	return (philos);
+    philos = malloc(size * sizeof(t_philo));
+    if (!philos)
+        return (NULL);
+
+    i = 0;
+    while (i < size) {
+        philos[i].id = i;
+        philos[i].action = THINK;
+        philos[i].left = NULL;
+        philos[i].right = NULL;
+        philos[i].locks = locks;
+        philos[i].intervals = intervals; // Assign intervals
+        philos[i].last_meal_time = get_current_time();
+        printf("Initialized philosopher %zu with ID %zu\n", i, philos[i].id);
+        ++i;
+    }
+
+    return (philos);
 }
+
 
 /**
  * Assign left and right forks to an ID phisopher.
@@ -92,8 +92,8 @@ t_table allocate(const t_intervals intervals, size_t size)
 		return (table);
 
 	table.forks = allocate_mutexes(size);
-	table.philosophers = allocate_philos(size, &table.locks);
 	table.intervals = intervals;
+	table.philosophers = allocate_philos(size, &table.locks, intervals);
 	table.size = size;
 	return (table);
 }

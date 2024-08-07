@@ -5,7 +5,7 @@ CFLAGS = -g -Wall -Wextra -Werror
 SRC_PATH = src/
 
 FILES_PATH = ./
-FILES_SRC = assign.c init.c
+FILES_SRC = assign.c init.c log_action.c utils.c thread_management.c actions.c
 
 OBJ_PATH = build/
 
