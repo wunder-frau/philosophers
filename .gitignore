@@ -1,0 +1,6 @@
+*.a
+*.bak.c
+*.dSYM
+*.o
+*.out
+/philo
