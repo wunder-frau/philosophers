@@ -30,5 +30,36 @@ int ft_safe_usleep(t_time duration, t_philo *philo)
 		}
 		usleep(500);
 	}
-	return 0;
+	return (0);
+}
+
+// void	destroy_and_free(t_table *table)
+// {
+// 	if (&table->locks.eat)
+// 		destroy(&table->locks.eat, 1);
+// 	if (&table->locks.print)
+// 		destroy(&table->locks.print, 1);
+// 	if (&table->locks.dead)
+// 		destroy(&table->locks.dead, 1);
+// 	if (&table->forks)
+// 		destroy(&table->forks, table->size);
+// }
+
+void destroy_and_free(t_table *table)
+{
+	pthread_mutex_destroy(&table->locks.eat);
+	pthread_mutex_destroy(&table->locks.print);
+	pthread_mutex_destroy(&table->locks.dead);
+	if (table->forks != NULL)
+	{
+		//TO DO remove for loop 
+		for (size_t i = 0; i < table->size; ++i)
+		{
+			pthread_mutex_destroy(&table->forks[i]);
+		}
+	}
+	if (table->philosophers != NULL)
+		free(table->philosophers);
+	if (table->forks != NULL)
+		free(table->forks);
 }

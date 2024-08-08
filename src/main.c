@@ -17,10 +17,6 @@ int main(int argc, char **argv)
 	table = allocate(intervals, atoi(argv[1]));
 	assign(&table);
 	init(&table);
-
-	if (table.philosophers)
-		free(table.philosophers);
-	if (table.forks)
-		free(table.forks);
+	destroy_and_free(&table);
 	return (0);
 }
