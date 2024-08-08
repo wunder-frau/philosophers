@@ -63,7 +63,7 @@ void	*act(void *philo_ptr)
 
 	if (philo->id % 2 == 1)
 	{
-		printf("Philosopher %zu is thinking initially\n", philo->id + 1);
+		printf("Philosopher %zu is thinking initially\n", philo->id);
 		if (do_think(philo) == 1)
 			return (NULL);
 		ft_safe_usleep(philo->intervals.eat / 2, philo);

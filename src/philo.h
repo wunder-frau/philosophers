@@ -73,13 +73,15 @@ void init(t_table *);
 bool is_dead(t_philo *philo);
 
 /* utils.c */
-long get_current_time(void);
-int ft_safe_usleep(t_time duration, t_philo *philo);
+long	get_current_time(void);
+int		ft_safe_usleep(t_time duration, t_philo *philo);
+void	destroy_and_free(t_table *table);
 
 /* log_action.c */
 void log_action(t_philo *philo, const char *event_message);
 
 /* actions.c */
 void	*act(void *philo_ptr);
+void	destroy(pthread_mutex_t **mutexes, size_t n);
 
 #endif
