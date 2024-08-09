@@ -2,10 +2,10 @@
 
 static void	swap(pthread_mutex_t *a, pthread_mutex_t *b)
 {
-	pthread_mutex_t	tmp;
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	pthread_mutex_t	*tmp;
+	tmp = a;
+	a = b;
+	b = tmp;
 }
 
 void	destroy(pthread_mutex_t **mutexes, size_t n)

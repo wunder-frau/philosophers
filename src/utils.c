@@ -33,18 +33,6 @@ int ft_safe_usleep(t_time duration, t_philo *philo)
 	return (0);
 }
 
-// void	destroy_and_free(t_table *table)
-// {
-// 	if (&table->locks.eat)
-// 		destroy(&table->locks.eat, 1);
-// 	if (&table->locks.print)
-// 		destroy(&table->locks.print, 1);
-// 	if (&table->locks.dead)
-// 		destroy(&table->locks.dead, 1);
-// 	if (&table->forks)
-// 		destroy(&table->forks, table->size);
-// }
-
 void destroy_and_free(t_table *table)
 {
 	pthread_mutex_destroy(&table->locks.eat);
