@@ -21,7 +21,7 @@ static bool	do_eat(t_philo *philo)
 	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(&philo->locks->eat);
 
-	ft_safe_usleep(philo->intervals->eat, philo);
+	ft_safe_usleep(philo->intervals.eat, philo);
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
 
@@ -34,7 +34,7 @@ static bool	do_sleep(t_philo *philo)
 		return (false);
 	philo->action = SLEEP;
 	log_action(philo, "is sleeping");
-	ft_safe_usleep(philo->intervals->sleep, philo);
+	ft_safe_usleep(philo->intervals.sleep, philo);
 	return (true);
 }
 
@@ -66,7 +66,7 @@ void	*act(void *philo_ptr)
 		//printf("Philosopher %zu is thinking initially\n", philo->id);
 		if (do_think(philo) == 1)
 			return (NULL);
-		ft_safe_usleep(philo->intervals->eat / 2, philo);
+		ft_safe_usleep(philo->intervals.eat / 2, philo);
 	}
 
 	while (!is_dead(philo))

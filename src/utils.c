@@ -5,7 +5,7 @@ bool	is_dead(t_philo *philo)
 	t_time curr;
 
 	curr = get_current_time();
-	if (curr >= philo->last_meal_time + philo->intervals->die)
+	if (curr >= philo->last_meal_time + philo->intervals.die)
 	{
 		pthread_mutex_lock(&philo->locks->death);
 		if (philo->action != DEAD)

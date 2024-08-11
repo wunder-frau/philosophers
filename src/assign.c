@@ -42,7 +42,7 @@ static pthread_mutex_t	*allocate_mutexes(const size_t size)
 	return mutexes;
 }
 
-t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals *intervals) {
+t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals intervals) {
     t_philo *philos;
     size_t i;
 
@@ -58,7 +58,7 @@ t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals *interva
         philos[i].right = NULL;
         philos[i].locks = locks;
         philos[i].intervals = intervals;
-        philos[i].last_meal_time = intervals->start;
+        philos[i].last_meal_time = intervals.start;
         printf("Initialized philosopher %zu with ID %zu\n", i, philos[i].id);
         ++i;
     }
@@ -100,7 +100,7 @@ t_table allocate(const t_intervals intervals, size_t size)
 		return (table);
 	}
 	table.intervals = intervals;
-	table.philosophers = allocate_philos(size, &table.locks, &table.intervals);
+	table.philosophers = allocate_philos(size, &table.locks, table.intervals);
 	if (table.philosophers == NULL)
 	{
 		destroy_and_free(&table);
