@@ -47,7 +47,7 @@ typedef struct s_philo
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
 	t_locks			*locks;
-	t_intervals		*intervals;
+	t_intervals		intervals;
 	t_time			last_meal_time; 
 } t_philo;
 //: }}}
@@ -61,13 +61,12 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 	t_philo	*philosophers;
 	t_locks	locks;
-	t_intervals	intervals;
 } t_table;
 //: }}}
 
 t_table allocate(const t_intervals, size_t);
 void assign(t_table *);
-t_philo *allocate_philos(const size_t, t_locks *, t_intervals *);
+t_philo *allocate_philos(const size_t, t_locks *, t_intervals );
 void init(t_table *);
 // bool	init_mutex_array(int count, pthread_mutex_t **mutex);
 

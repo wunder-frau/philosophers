@@ -1,6 +1,6 @@
 NAME = philo
 CC = gcc
-# CFLAGS = -g -Wall -Wextra -Werror
+#CFLAGS = -g -Wall -Wextra -Werror
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 
 SRC_PATH = src/
