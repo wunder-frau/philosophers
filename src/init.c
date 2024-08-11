@@ -16,10 +16,14 @@ static void	init_pthreads(pthread_t	*monitor, t_table *table)
 		if (pthread_create(&table->philosophers[i].thread, NULL,
 			&act, (void *)&table->philosophers[i]))
 		{
+			printf("Error: philosopher thread_create failed\n");
+			// destroy_and_free(table);
+			// return ;
 			pthread_mutex_lock(&table->philosophers[i].locks->death);
 			table->philosophers[i].action = DEAD;
 			log_action(&table->philosophers[i], "has died");
 			pthread_mutex_unlock(&table->philosophers[i].locks->death);
+			break ;
 		}
 		++i;
 	}
@@ -48,6 +52,7 @@ void init(t_table *table)
 {
 	pthread_t	monitor;
 
+	table->game_over = false;
 	init_pthreads(&monitor, table);
 	join_pthreads(&monitor, table);
 }

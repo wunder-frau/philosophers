@@ -8,6 +8,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+typedef struct s_table t_table;
+
 //: Time {{{
 typedef long t_time;
 // typedef struct timeval	t_time;
@@ -48,7 +50,8 @@ typedef struct s_philo
 	pthread_mutex_t	*right;
 	t_locks			*locks;
 	t_intervals		intervals;
-	t_time			last_meal_time; 
+	t_time			last_meal_time;
+	t_table			*table;
 } t_philo;
 //: }}}
 
@@ -61,8 +64,15 @@ typedef struct s_table
 	pthread_mutex_t	*forks;
 	t_philo	*philosophers;
 	t_locks	locks;
+	bool	game_over;
 } t_table;
 //: }}}
+
+// typedef struct s_act_args
+// {
+// 	t_table *table;
+// 	t_philo	*philo;
+// } t_act_args;
 
 t_table allocate(const t_intervals, size_t);
 void assign(t_table *);
@@ -73,15 +83,16 @@ void init(t_table *);
 /* utils.c */
 bool 	is_dead(t_philo *);
 t_time	get_current_time(void);
-int		ft_safe_usleep(t_time duration, t_philo *philo);
+int		ft_safe_usleep(t_time , t_philo *);
 void	destroy_and_free(t_table *table);
-void *monitoring(void *table_ptr);
+void 	*monitoring(void *table_ptr);
+bool 	is_game_over(const t_table *);
 
 /* log_action.c */
-void log_action(t_philo *philo, const char *event_message);
+void	log_action(t_philo *philo, const char *event_message);
 
 /* actions.c */
-void	*act(void *philo_ptr);
+void	*act(void *);
 void	destroy(pthread_mutex_t **mutexes, size_t n);
 
 #endif

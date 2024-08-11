@@ -1,12 +1,12 @@
 #include "philo.h"
 
-// static void	swap(pthread_mutex_t *a, pthread_mutex_t *b)
-// {
-// 	pthread_mutex_t	*tmp;
-// 	tmp = a;
-// 	a = b;
-// 	b = tmp;
-// }
+static void	swap(pthread_mutex_t *a, pthread_mutex_t *b)
+{
+	pthread_mutex_t	*tmp;
+	tmp = a;
+	a = b;
+	b = tmp;
+}
 
 void	destroy(pthread_mutex_t **mutexes, size_t n)
 {
@@ -59,6 +59,7 @@ t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals interval
         philos[i].locks = locks;
         philos[i].intervals = intervals;
         philos[i].last_meal_time = intervals.start;
+		philos[i].table = NULL;
         printf("Initialized philosopher %zu with ID %zu\n", i, philos[i].id);
         ++i;
     }
@@ -74,8 +75,8 @@ static void	assign_forks(const t_table *table, t_philo *philo)
 	printf("%zu philosopher will recieve {%zu, %zu} forks\n", philo->id, philo->id, (philo->id + table->size - 1) % table->size);
 	philo->right = &(table->forks[philo->id]);
 	philo->left = &(table->forks[(philo->id + table->size - 1) % table->size]);
-	// if (philo->id + 1 == table->size)
-	// 	swap(philo->left, philo->right);
+	if (philo->id + 1 == table->size)
+		swap(philo->left, philo->right);
 }
 
 /**
@@ -89,10 +90,10 @@ t_table allocate(const t_intervals intervals, size_t size)
 	if (pthread_mutex_init(&table.locks.eat, NULL) != 0
 		|| pthread_mutex_init(&table.locks.print, NULL) != 0
 		|| pthread_mutex_init(&table.locks.death, NULL) != 0)
-		{
-			destroy_and_free(&table);
-			return (table);
-		}
+	{
+		destroy_and_free(&table);
+		return (table);
+	}
 	table.forks = allocate_mutexes(size);
 	if (table.forks == NULL)
 	{
@@ -119,6 +120,7 @@ void assign(t_table *table)
 	i = 0;
 	while (i < table->size)
 	{
+		table->philosophers[i].table = table;
 		assign_forks(table, &(table->philosophers[i]));
 		++i;
 	}

@@ -7,19 +7,20 @@ bool	is_dead(t_philo *philo)
 	curr = get_current_time();
 	if (curr >= philo->last_meal_time + philo->intervals.die)
 	{
-		pthread_mutex_lock(&philo->locks->death);
+		pthread_mutex_lock(&philo->locks->eat);
 		if (philo->action != DEAD)
 		{
 			philo->action = DEAD;
+			philo->table->game_over = true;
 			log_action(philo, "has died");
 		}
-		pthread_mutex_unlock(&philo->locks->death);
+		pthread_mutex_unlock(&philo->locks->eat);
 		return (true);
 	}
 	return (false);
 }
 
-static bool is_any_dead(const t_table *table)
+bool is_game_over(const t_table *table)
 {
 	size_t	i;
 
@@ -92,8 +93,11 @@ void	*monitoring(void *table_ptr)
 	table = (t_table *)table_ptr;
 	while (1)
 	{
-		if (is_any_dead(table))
+		if (is_game_over(table))
+		{
+			table->game_over = true;
 			break ;
+		}
 	}
 	return (NULL);
 }

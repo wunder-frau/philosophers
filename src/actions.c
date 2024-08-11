@@ -2,6 +2,8 @@
 
 static bool	do_eat(t_philo *philo)
 {
+	if (philo->table->game_over)
+		return (false);
 	pthread_mutex_lock(philo->right);
 	log_action(philo, "has taken right fork");
 
@@ -30,7 +32,7 @@ static bool	do_eat(t_philo *philo)
 
 static bool	do_sleep(t_philo *philo)
 {
-	if (is_dead(philo))
+	if (philo->table->game_over || is_dead(philo))
 		return (false);
 	philo->action = SLEEP;
 	log_action(philo, "is sleeping");
@@ -40,7 +42,7 @@ static bool	do_sleep(t_philo *philo)
 
 static bool	do_think(t_philo *philo)
 {
-	if (is_dead(philo))
+	if (philo->table->game_over || is_dead(philo))
 		return (false);
 	philo->action = THINK;
 	log_action(philo, "is thinking");
@@ -58,13 +60,15 @@ static bool	do_think(t_philo *philo)
 void	*act(void *philo_ptr)
 {
 	t_philo *philo;
-	
+
 	philo = (t_philo *)philo_ptr;
+	// if (is_game_over(philo->table))
+	// 	return (NULL);
 
 	if (philo->id % 2 == 1)
 	{
 		//printf("Philosopher %zu is thinking initially\n", philo->id);
-		if (do_think(philo) == 1)
+		if (!do_think(philo))
 			return (NULL);
 		ft_safe_usleep(philo->intervals.eat / 2, philo);
 	}
