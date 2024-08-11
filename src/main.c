@@ -3,7 +3,7 @@
 int main(int argc, char **argv)
 {
 	t_intervals	intervals;
-	t_table 		table;
+	t_table 	table;
 
 	if (argc != 5)
 	{
@@ -11,9 +11,9 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	intervals.start = get_current_time();
-	intervals.die = (time_t) atol(argv[2]);
-	intervals.eat = (time_t) atol(argv[3]);
-	intervals.sleep = (time_t) atol(argv[4]);
+	intervals.die = (t_time) atol(argv[2]);
+	intervals.eat = (t_time) atol(argv[3]);
+	intervals.sleep = (t_time) atol(argv[4]);
 	table = allocate(intervals, atol(argv[1]));
 	assign(&table);
 	init(&table);

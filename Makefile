@@ -1,7 +1,7 @@
 NAME = philo
-CC = cc
-#CFLAGS = -g -Wall -Wextra -Werror
-CFLAGS = -fsanitize=address -g
+CC = gcc
+# CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 
 SRC_PATH = src/
 
@@ -22,7 +22,7 @@ all: $(OBJ_PATH) $(NAME)
 $(NAME): $(OBJS)
 	# make -C ./libft
 	# @$(CC) $(CFLAGS) $(OBJS) ./libft/libft.a -o $(NAME)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -lpthread -o $(NAME)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	$(CC) $(CFLAGS) -c $< -o $@

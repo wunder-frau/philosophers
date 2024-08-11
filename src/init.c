@@ -1,50 +1,39 @@
 #include "philo.h"
 
-bool	is_dead(t_philo *philo)
-{
-	unsigned long current_time;
-	unsigned long time_since_last_meal;
-
-	current_time = get_current_time();
-	time_since_last_meal = current_time - philo->last_meal_time;
-	if (philo->intervals.die == 0)
-	{
-		printf("Error: die interval is 0. This should be checked.\n");
-		return (false);
-	}
-	if (time_since_last_meal >= philo->intervals.die)
-	{
-		pthread_mutex_lock(&philo->locks->dead);
-		if (philo->action != DEAD)
-		{
-			philo->action = DEAD;
-			log_action(philo, "has died");
-		}
-		pthread_mutex_unlock(&philo->locks->dead);
-		return (true);
-	}
-	return (false);
-}
-
-/**
-*	TODO:	Implement `create_threads()` to handle thread creation and
-*			`join_threads()` to handle thread joining separately.
-*			Move this functions to the `thread_management.c` file.
-*/
-void init(t_table *table)
+static void	init_pthreads(pthread_t	*monitor, t_table *table)
 {
 	size_t	i;
 
+	if (pthread_create(monitor, NULL, &monitoring, (void *)table))
+	{
+		printf("Error: monitoring thread_creat failed\n");
+		destroy_and_free(table);
+		return ;
+	}
 	i = 0;
 	while (i < table->size)
 	{
-		pthread_create(&table->philosophers[i].thread, NULL, &act, (void *)&table->philosophers[i]);
-		/*{
-			pthread_mutex_lock(&table->locks.print);
-			printf("%zu", table->philosophers[i].id);
-			pthread_mutex_unlock(&table->locks.print);
-		}*/
+		if (pthread_create(&table->philosophers[i].thread, NULL,
+			&act, (void *)&table->philosophers[i]))
+		{
+			pthread_mutex_lock(&table->philosophers[i].locks->death);
+			table->philosophers[i].action = DEAD;
+			log_action(&table->philosophers[i], "has died");
+			pthread_mutex_unlock(&table->philosophers[i].locks->death);
+		}
 		++i;
+	}
+}
+
+static void	join_pthreads(pthread_t	*monitor, t_table *table)
+{
+	size_t	i;
+
+	if (pthread_join(*monitor, NULL) != 0)
+	{
+		printf("Error: monitor_join falied\n");
+		destroy_and_free(table);
+		return ; // (clean_all(philo->table, philo));
 	}
 	i = 0;
 	while (i < table->size)
@@ -53,4 +42,12 @@ void init(t_table *table)
 			printf("Error: pthread_join failed\n");
 		++i;
 	}
+}
+
+void init(t_table *table)
+{
+	pthread_t	monitor;
+
+	init_pthreads(&monitor, table);
+	join_pthreads(&monitor, table);
 }

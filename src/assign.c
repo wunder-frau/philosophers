@@ -1,12 +1,12 @@
 #include "philo.h"
 
-static void	swap(pthread_mutex_t *a, pthread_mutex_t *b)
-{
-	pthread_mutex_t	*tmp;
-	tmp = a;
-	a = b;
-	b = tmp;
-}
+// static void	swap(pthread_mutex_t *a, pthread_mutex_t *b)
+// {
+// 	pthread_mutex_t	*tmp;
+// 	tmp = a;
+// 	a = b;
+// 	b = tmp;
+// }
 
 void	destroy(pthread_mutex_t **mutexes, size_t n)
 {
@@ -42,7 +42,7 @@ static pthread_mutex_t	*allocate_mutexes(const size_t size)
 	return mutexes;
 }
 
-t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals intervals) {
+t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals *intervals) {
     t_philo *philos;
     size_t i;
 
@@ -58,7 +58,7 @@ t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals interval
         philos[i].right = NULL;
         philos[i].locks = locks;
         philos[i].intervals = intervals;
-        philos[i].last_meal_time = get_current_time();
+        philos[i].last_meal_time = intervals->start;
         printf("Initialized philosopher %zu with ID %zu\n", i, philos[i].id);
         ++i;
     }
@@ -74,8 +74,8 @@ static void	assign_forks(const t_table *table, t_philo *philo)
 	printf("%zu philosopher will recieve {%zu, %zu} forks\n", philo->id, philo->id, (philo->id + table->size - 1) % table->size);
 	philo->right = &(table->forks[philo->id]);
 	philo->left = &(table->forks[(philo->id + table->size - 1) % table->size]);
-	if (philo->id + 1 == table->size)
-		swap(philo->left, philo->right);
+	// if (philo->id + 1 == table->size)
+	// 	swap(philo->left, philo->right);
 }
 
 /**
@@ -88,7 +88,7 @@ t_table allocate(const t_intervals intervals, size_t size)
 	table.size = 0;
 	if (pthread_mutex_init(&table.locks.eat, NULL) != 0
 		|| pthread_mutex_init(&table.locks.print, NULL) != 0
-		|| pthread_mutex_init(&table.locks.dead, NULL) != 0)
+		|| pthread_mutex_init(&table.locks.death, NULL) != 0)
 		{
 			destroy_and_free(&table);
 			return (table);
@@ -100,7 +100,7 @@ t_table allocate(const t_intervals intervals, size_t size)
 		return (table);
 	}
 	table.intervals = intervals;
-	table.philosophers = allocate_philos(size, &table.locks, intervals);
+	table.philosophers = allocate_philos(size, &table.locks, &table.intervals);
 	if (table.philosophers == NULL)
 	{
 		destroy_and_free(&table);
