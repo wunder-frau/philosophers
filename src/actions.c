@@ -2,7 +2,7 @@
 
 static bool	do_eat(t_philo *philo)
 {
-	if (philo->table->game_over)
+	if (philo->action == DEAD || philo->table->game_over)
 		return (false);
 	pthread_mutex_lock(philo->right);
 	log_action(philo, "has taken right fork");
@@ -10,7 +10,7 @@ static bool	do_eat(t_philo *philo)
 	pthread_mutex_lock(philo->left);
 	log_action(philo, "has taken left fork");
 
-	if (is_dead(philo))
+	if (philo->action == DEAD) // if (is_dead(philo))
 	{
 		pthread_mutex_unlock(philo->right);
 		pthread_mutex_unlock(philo->left);
@@ -32,7 +32,7 @@ static bool	do_eat(t_philo *philo)
 
 static bool	do_sleep(t_philo *philo)
 {
-	if (philo->table->game_over || is_dead(philo))
+	if (philo->action == DEAD || philo->table->game_over) // if (philo->table->game_over || is_dead(philo))
 		return (false);
 	philo->action = SLEEP;
 	log_action(philo, "is sleeping");
@@ -42,7 +42,7 @@ static bool	do_sleep(t_philo *philo)
 
 static bool	do_think(t_philo *philo)
 {
-	if (philo->table->game_over || is_dead(philo))
+	if (philo->action == DEAD || philo->table->game_over) // (philo->table->game_over || is_dead(philo))
 		return (false);
 	philo->action = THINK;
 	log_action(philo, "is thinking");
@@ -70,10 +70,11 @@ void	*act(void *philo_ptr)
 		//printf("Philosopher %zu is thinking initially\n", philo->id);
 		if (!do_think(philo))
 			return (NULL);
+		// philo->action = SLEEP;
 		ft_safe_usleep(philo->intervals.eat / 2, philo);
 	}
 
-	while (!is_dead(philo))
+	while (!is_dead(philo) && !philo->table->game_over)
 	{
 		if (philo->action == EAT)
 		{
@@ -108,3 +109,44 @@ void	*act(void *philo_ptr)
 
 	return (NULL);
 }
+
+// void *act(void *philo_ptr)
+// {
+//     t_philo *philo;
+
+//     philo = (t_philo *)philo_ptr;
+
+//     if (philo->id % 2 == 1)
+//     {
+//         if (!do_think(philo))
+//             return (NULL);
+//         ft_safe_usleep(philo->intervals.eat / 2, philo);
+//     }
+
+//     while (!is_dead(philo) && !philo->table->game_over)
+//     {
+//         if (philo->action == EAT)
+//         {
+//             if (!do_eat(philo))
+//                 return (NULL);
+//             philo->action = SLEEP;
+//         }
+//         else if (philo->action == SLEEP)
+//         {
+//             if (!do_sleep(philo))
+//                 return (NULL);
+//             philo->action = THINK;
+//         }
+//         else if (philo->action == THINK)
+//         {
+//             if (!do_think(philo))
+//                 return (NULL);
+//             philo->action = EAT;
+//         }
+//       if (is_dead(philo))
+//             return (NULL);
+//     }
+
+//     return (NULL);
+// }
+

@@ -4,19 +4,21 @@ bool	is_dead(t_philo *philo)
 {
 	t_time curr;
 
+	pthread_mutex_lock(&philo->locks->eat);
 	curr = get_current_time();
+	//printf("Philosopher %zu: curr = %ld, last_meal_time = %ld, die = %ld\n", philo->id, curr, philo->last_meal_time, philo->intervals.die);
 	if (curr >= philo->last_meal_time + philo->intervals.die)
 	{
-		pthread_mutex_lock(&philo->locks->eat);
 		if (philo->action != DEAD)
-		{
+{
+			pthread_mutex_unlock(&philo->locks->eat);
 			philo->action = DEAD;
 			philo->table->game_over = true;
 			log_action(philo, "has died");
 		}
-		pthread_mutex_unlock(&philo->locks->eat);
 		return (true);
 	}
+	pthread_mutex_unlock(&philo->locks->eat);
 	return (false);
 }
 
@@ -98,6 +100,10 @@ void	*monitoring(void *table_ptr)
 			table->game_over = true;
 			break ;
 		}
+		usleep(1000);
 	}
+	pthread_mutex_lock(&table->locks.print);
+	table->can_write = false;
+	pthread_mutex_unlock(&table->locks.print);
 	return (NULL);
 }

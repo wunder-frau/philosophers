@@ -65,6 +65,7 @@ typedef struct s_table
 	t_philo	*philosophers;
 	t_locks	locks;
 	bool	game_over;
+	bool	can_write;
 } t_table;
 //: }}}
 

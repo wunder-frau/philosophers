@@ -121,6 +121,7 @@ void assign(t_table *table)
 	while (i < table->size)
 	{
 		table->philosophers[i].table = table;
+		table->can_write = true;
 		assign_forks(table, &(table->philosophers[i]));
 		++i;
 	}
