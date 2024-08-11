@@ -63,7 +63,7 @@ void	*act(void *philo_ptr)
 
 	if (philo->id % 2 == 1)
 	{
-		printf("Philosopher %zu is thinking initially\n", philo->id);
+		//printf("Philosopher %zu is thinking initially\n", philo->id);
 		if (do_think(philo) == 1)
 			return (NULL);
 		ft_safe_usleep(philo->intervals.eat / 2, philo);
@@ -73,31 +73,31 @@ void	*act(void *philo_ptr)
 	{
 		if (philo->action == EAT)
 		{
-			printf("Philosopher %zu is about to eat\n", philo->id + 1);
+			//printf("Philosopher %zu is about to eat\n", philo->id + 1);
 			if (!do_eat(philo))
 				return (NULL);
 			philo->action = SLEEP;
-			printf("Philosopher %zu finished eating, will sleep next\n", philo->id + 1);
+			//printf("Philosopher %zu finished eating, will sleep next\n", philo->id + 1);
 		}
 		else if (philo->action == SLEEP)
 		{
-			printf("Philosopher %zu is about to sleep\n", philo->id + 1);
+			//printf("Philosopher %zu is about to sleep\n", philo->id + 1);
 			if (!do_sleep(philo))
 				return (NULL);
 			philo->action = THINK;
-			printf("Philosopher %zu finished sleeping, will think next\n", philo->id + 1);
+			//printf("Philosopher %zu finished sleeping, will think next\n", philo->id + 1);
 		}
 		else if (philo->action == THINK)
 		{
-			printf("Philosopher %zu is about to think\n", philo->id + 1);
+			//printf("Philosopher %zu is about to think\n", philo->id + 1);
 			if (!do_think(philo))
 				return (NULL);
 			philo->action = EAT;
-			printf("Philosopher %zu finished thinking, will eat next\n", philo->id + 1);
+			//printf("Philosopher %zu finished thinking, will eat next\n", philo->id + 1);
 		}
 		else if (philo->action == DEAD)
 		{
-			printf("Philosopher %zu has died and will exit\n", philo->id + 1);
+			//printf("Philosopher %zu has died and will exit\n", philo->id + 1);
 			return (NULL);
 		}
 	}
