@@ -1,38 +1,69 @@
 #include "philo.h"
 
-static bool	do_eat(t_philo *philo)
-{
-	if (philo->action == DEAD || philo->table->game_over)
-		return (false);
-	pthread_mutex_lock(philo->right);
-	log_action(philo, "has taken right fork");
+static bool do_eat(t_philo *philo) {
+    //if (philo->action == DEAD || philo->table->game_over)
+	if(check_death_flag(philo))
+        return false;
 
-	pthread_mutex_lock(philo->left);
-	log_action(philo, "has taken left fork");
+    pthread_mutex_lock(philo->right); // Lock right fork
+    log_action(philo, "has taken right fork");
 
-	if (philo->action == DEAD) // if (is_dead(philo))
-	{
-		pthread_mutex_unlock(philo->right);
-		pthread_mutex_unlock(philo->left);
-		return (false);
-	}
+    pthread_mutex_lock(philo->left);  // Lock left fork
+    log_action(philo, "has taken left fork");
 
-	pthread_mutex_lock(&philo->locks->eat);
-	philo->action = EAT;
-	log_action(philo, "is eating");
-	philo->last_meal_time = get_current_time();
-	pthread_mutex_unlock(&philo->locks->eat);
+    if (philo->action == DEAD) { // Check if dead after locking
+        pthread_mutex_unlock(philo->right);
+        pthread_mutex_unlock(philo->left);
+        return false;
+    }
 
-	ft_safe_usleep(philo->intervals.eat, philo);
-	pthread_mutex_unlock(philo->left);
-	pthread_mutex_unlock(philo->right);
+    pthread_mutex_lock(&philo->locks->eat);
+    philo->action = EAT;
+    log_action(philo, "is eating");
+    philo->last_meal_time = get_current_time();
+    pthread_mutex_unlock(&philo->locks->eat);
 
-	return (true);
+    ft_safe_usleep(philo->intervals.eat, philo);
+    pthread_mutex_unlock(philo->left); // Unlock left fork
+    pthread_mutex_unlock(philo->right); // Unlock right fork
+
+    return true;
 }
+// static bool	do_eat(t_philo *philo)
+// {
+// 	if (philo->action == DEAD || philo->table->game_over)
+// 		return (false);
+// 	pthread_mutex_lock(philo->right);
+// 	log_action(philo, "has taken right fork");
+
+// 	pthread_mutex_lock(philo->left);
+// 	log_action(philo, "has taken left fork");
+
+// 		if(check_death_flag(philo))
+// 	//if (philo->action == DEAD) // if (is_dead(philo))
+// 	{
+// 		pthread_mutex_unlock(philo->right);
+// 		pthread_mutex_unlock(philo->left);
+// 		return (false);
+// 	}
+
+// 	pthread_mutex_lock(&philo->locks->eat);
+// 	philo->action = EAT;
+// 	log_action(philo, "is eating");
+// 	philo->last_meal_time = get_current_time();
+// 	pthread_mutex_unlock(&philo->locks->eat);
+
+// 	ft_safe_usleep(philo->intervals.eat, philo);
+// 	pthread_mutex_unlock(philo->left);
+// 	pthread_mutex_unlock(philo->right);
+
+// 	return (true);
+// }
 
 static bool	do_sleep(t_philo *philo)
 {
-	if (philo->action == DEAD || philo->table->game_over) // if (philo->table->game_over || is_dead(philo))
+	//if (philo->action == DEAD || philo->table->game_over) // if (philo->table->game_over || is_dead(philo))
+	if(check_death_flag(philo))
 		return (false);
 	philo->action = SLEEP;
 	log_action(philo, "is sleeping");
@@ -42,7 +73,8 @@ static bool	do_sleep(t_philo *philo)
 
 static bool	do_think(t_philo *philo)
 {
-	if (philo->action == DEAD || philo->table->game_over) // (philo->table->game_over || is_dead(philo))
+	//if (philo->action == DEAD || philo->table->game_over) // (philo->table->game_over || is_dead(philo))
+	if(check_death_flag(philo))
 		return (false);
 	philo->action = THINK;
 	log_action(philo, "is thinking");
@@ -56,6 +88,7 @@ static bool	do_think(t_philo *philo)
  * 						passed as a `void *` to comply with `pthread_create` requirements.
  * @return: Returns NULL when the philosopher's routine is complete or if the philosopher has died.
  */
+
 
 void	*act(void *philo_ptr)
 {
@@ -74,7 +107,8 @@ void	*act(void *philo_ptr)
 		ft_safe_usleep(philo->intervals.eat / 2, philo);
 	}
 
-	while (!is_dead(philo) && !philo->table->game_over)
+	while (!is_game_over(philo->table) && !philo->table->game_over)
+	//while(!check_death_flag(philo))
 	{
 		if (philo->action == EAT)
 		{

@@ -87,13 +87,18 @@ t_time	get_current_time(void);
 int		ft_safe_usleep(t_time , t_philo *);
 void	destroy_and_free(t_table *table);
 void 	*monitoring(void *table_ptr);
-bool 	is_game_over(const t_table *);
+// bool 	is_game_over(const t_table *);
+bool is_game_over(t_table *table);
+
+
+bool	check_death_flag(t_philo *philo);
 
 /* log_action.c */
 void	log_action(t_philo *philo, const char *event_message);
+void	log_action_death(t_philo *philo, const char *event_message);
 
 /* actions.c */
 void	*act(void *);
 void	destroy(pthread_mutex_t **mutexes, size_t n);
-
+//void	destroy(pthread_mutex_t *mutexes, size_t n);
 #endif

@@ -15,6 +15,7 @@ int main(int argc, char **argv)
 	intervals.eat = (t_time) atol(argv[3]);
 	intervals.sleep = (t_time) atol(argv[4]);
 	table = allocate(intervals, atol(argv[1]));
+	table.can_write = true;
 	assign(&table);
 	init(&table);
 	destroy_and_free(&table);
