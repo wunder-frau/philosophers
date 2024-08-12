@@ -1,7 +1,9 @@
 NAME = philo
-CC = cc
+LIBFT_DIR = libft_
+LIBFT = $(LIBFT_DIR)/libft.a
+CC = gcc
 #CFLAGS = -g -Wall -Wextra -Werror
-CFLAGS = -fsanitize=address -g
+CFLAGS = -fsanitize=address -g -I$(LIBFT_DIR)
 
 SRC_PATH = src/
 
@@ -13,16 +15,17 @@ OBJ_PATH = build/
 SRC = main.c \
 	$(addprefix $(FILES_PATH), $(FILES_SRC))
 
-LIBFT = libft/libft.a
+LIBFT = libft_/libft.a
 OBJ =	$(SRC:.c=.o)
 OBJS =	$(addprefix $(OBJ_PATH), $(OBJ))
 
 all: $(OBJ_PATH) $(NAME)
 
-$(NAME): $(OBJS)
-	# make -C ./libft
-	# @$(CC) $(CFLAGS) $(OBJS) ./libft/libft.a -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -31,13 +34,17 @@ $(OBJ_PATH):
 	mkdir $(OBJ_PATH)
 
 clean:
-	# make clean -C ./libft
 	@rm -rf $(OBJ_PATH)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	# make fclean -C ./libft
 	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+submodule:
+	@git submodule init
+	@git submodule update
+
+.PHONY: all clean fclean re submodule
