@@ -7,10 +7,12 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include "../libft_/libft.h"
 
 //: Time {{{
-typedef size_t t_time;
-// typedef struct timeval	t_time;
+typedef long t_time;
+//: }}}
+typedef struct s_table t_table;
 
 typedef struct s_intervals
 {
@@ -27,7 +29,7 @@ typedef struct s_locks
 	pthread_mutex_t	eat;
 	pthread_mutex_t	dead;
 } t_locks;
-//: }}}
+
 
 //: Philosopher {{{
 typedef enum e_action
@@ -38,30 +40,34 @@ typedef enum e_action
 	DEAD
 } t_action;
 
+//: Philosophical room {{{
 typedef struct s_philo
 {
 	size_t			id;
-	t_action		action;
-	pthread_t		thread;
-	pthread_mutex_t	state;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
-	t_locks			*locks;
-	t_intervals		intervals;
-	long			last_meal_time; 
+	long			last_meal_time;
+	pthread_mutex_t	*philo;
+	t_table			*table;
 } t_philo;
-//: }}}
-
-//: Philosophical room {{{
-// typedef pthread_mutex_t	t_fork;
 
 typedef struct s_table
 {
-	size_t	size; // there are as many forks as philosophers
-	pthread_mutex_t	*forks;
+	long	size; // there are as many forks as philosophers
+	t_time	die;
+	t_time	eat;
+	t_time	sleep;
+	long	n_meals;
+	long	n_full;
+	t_time	t_wait;
+	t_time	start;
+	long	finished;
 	t_philo	*philosophers;
-	t_locks	locks;
-	t_intervals	intervals;
+	pthread_mutex_t	*philo;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	*death;
+	pthread_t		*monitor;
+	pthread_t		*threads;
 } t_table;
 //: }}}
 

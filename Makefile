@@ -8,12 +8,11 @@ CFLAGS = -fsanitize=address -g -I$(LIBFT_DIR)
 SRC_PATH = src/
 
 FILES_PATH = ./
-FILES_SRC = assign.c init.c log_action.c utils.c thread_management.c actions.c
+FILES_SRC = main.c assign.c init.c log_action.c utils.c thread_management.c actions.c
 
 OBJ_PATH = build/
 
-SRC = main.c \
-	$(addprefix $(FILES_PATH), $(FILES_SRC))
+SRC = $(addprefix $(FILES_PATH), $(FILES_SRC))
 
 LIBFT = libft_/libft.a
 OBJ =	$(SRC:.c=.o)
@@ -22,7 +21,7 @@ OBJS =	$(addprefix $(OBJ_PATH), $(OBJ))
 all: $(OBJ_PATH) $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
