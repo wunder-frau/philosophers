@@ -2,13 +2,15 @@ NAME = philo
 LIBFT_DIR = libft_
 LIBFT = $(LIBFT_DIR)/libft.a
 CC = gcc
-#CFLAGS = -g -Wall -Wextra -Werror
-CFLAGS = -fsanitize=address -g -I$(LIBFT_DIR)
+CFLAGS = -g -Wall -Wextra -Werror
+#CFLAGS = -fsanitize=address -g -I$(LIBFT_DIR)
 
 SRC_PATH = src/
 
 FILES_PATH = ./
-FILES_SRC = main.c assign.c init.c log_action.c utils.c thread_management.c actions.c
+FILES_SRC = main.c assign.c init.c log_action.c time_managment_utils.c \
+			thread_management.c actions.c initialization_time.c\
+			atomic_operations.c destroy_and_free.c monitor.c
 
 OBJ_PATH = build/
 

@@ -22,7 +22,7 @@ static void	assign_forks(const t_table *table, t_philo *philo)
 
 void	destroy(pthread_mutex_t *mutexes, size_t n)
 {
-	long	i;
+	size_t	i;
 
 	if (!mutexes)
 		return ;
@@ -39,10 +39,10 @@ void	destroy(pthread_mutex_t *mutexes, size_t n)
 /**
  * Initialise mutexes, i.e. mutexes must be allocated.
  */
-bool	allocate_mutexes(pthread_mutex_t **mutexes, long size)
+bool	allocate_mutexes(pthread_mutex_t **mutexes, size_t size)
 {
 	pthread_mutex_t	*tmp;
-	long			i;
+	size_t			i;
 
 	tmp = ft_calloc(size, sizeof(pthread_mutex_t));
 	if (!tmp)
@@ -61,10 +61,10 @@ bool	allocate_mutexes(pthread_mutex_t **mutexes, long size)
 	return (true);
 }
 
-bool	allocate_philos(t_table *table, long size)
+bool	allocate_philosophers(t_table *table, size_t size)
 {
 	t_philo	*philosophers;
-	long	i;
+	size_t	i;
 
 	philosophers = ft_calloc(size, sizeof(t_philo));
 	if (!philosophers)
@@ -75,35 +75,27 @@ bool	allocate_philos(t_table *table, long size)
 		philosophers[i].id = i;
 		philosophers[i].table = table;
 		assign_forks(table, &philosophers[i]);
-		philosophers[i].mtx_philo = &table->mtx_philo[i];
+		philosophers[i].mtx_philo = &table->mtx_philosophers[i];
 		printf("Initialized philosopher %zu with ID %zu\n", i, philosophers[i].id);
 		i++;
 	}
 	table->philosophers = philosophers;
 	return (true);
 }
-// t_philo *allocate_philos(const size_t size, t_locks *locks, t_intervals intervals) {
-//     t_philo *philos;
-//     size_t i;
 
-//     philos = calloc(size, sizeof(t_philo));
-//     if (!philos)
-//         return (NULL);
-
-//     i = 0;
-//     while (i < size) {
-//         philos[i].id = i;
-//         philos[i].action = THINK;
-//         philos[i].left = NULL;
-//         philos[i].right = NULL;
-//         philos[i].locks = locks;
-//         philos[i].intervals = intervals;
-//         philos[i].last_meal_time = get_current_time();
-//         printf("Initialized philosopher %zu with ID %zu\n", i, philos[i].id);
-//         ++i;
-//     }
-//     return (philos);
-// }
+bool	allocate_threads(t_table *table)
+{
+	table->monitor = ft_calloc(1, sizeof(pthread_t));
+	if (!table->monitor)
+		return (false);
+	table->threads = ft_calloc(table->size, sizeof(pthread_t));
+	if (!table->threads)
+	{
+		free(table->monitor);
+		return (false);
+	}
+	return (true);
+}
 
 /**
  * Allocate table's arrays.
@@ -112,26 +104,16 @@ bool	allocate(t_table *table)
 {
 	if (!allocate_mutexes(&(table->mtx_forks), table->size))
 		return (false);
-	if (!allocate_mutexes(&(table->mtx_philo), table->size))
+	if (!allocate_mutexes(&(table->mtx_philosophers), table->size))
 		return (false);
-	if (!allocate_mutexes(&(table->mtx_death), 1))
+	if (!allocate_mutexes(&(table->mtx_act), 1))
 		return (false);
-	if (!allocate_philos(table, table->size))
+	if (!allocate_philosophers(table, table->size))
 		return (false);
+	if (!allocate_threads(table))
+	{
+		destroy_and_free(table);
+		return (false);
+	}
 	return (true);
 }
-
-// /**
-//  * Set initial philosophers' actions and distribute forks.
-//  */
-// void assign(t_table *table)
-// {
-// 	size_t i;
-
-// 	i = 0;
-// 	while (i < table->size)
-// 	{
-// 		assign_forks(table, &(table->philosophers[i]));
-// 		++i;
-// 	}
-// }

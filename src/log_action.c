@@ -1,14 +1,21 @@
-// #include "philo.h"
+#include "philo.h"
 
-// /**
-//  * Log a philosopher's action with a timestamp.
-//  */
-// void	log_action(t_philo *philo, const char *event_message)
-// {
-// 	t_time	time;
+/**
+ * Log a philosopher's action with a timestamp.
+ */
 
-// 	pthread_mutex_lock(&philo->locks->print);
-// 	time = get_current_time() - philo->intervals.start;
-// 	printf("%zu %zu %s\n", time, philo->id + 1, event_message);
-// 	pthread_mutex_unlock(&philo->locks->print);
-// }
+bool	log_action(t_philo *philo, long timestamp, char *act_msg)
+{
+	t_table	*table;
+
+	table = philo->table;
+	pthread_mutex_lock(table->mtx_act);
+	if (table->is_game_over == 0)
+	{
+		printf("%zu\t%zu\t%s", timestamp - table->init_time, philo->id + 1, act_msg);
+		pthread_mutex_unlock(table->mtx_act);
+		return (false);
+	}
+	pthread_mutex_unlock(table->mtx_act);
+	return (true);
+}
