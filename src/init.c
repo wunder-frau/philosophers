@@ -26,11 +26,11 @@
 // 	return (false);
 // }
 
-// /**
-// *	TODO:	Implement `create_threads()` to handle thread creation and
-// *			`join_threads()` to handle thread joining separately.
-// *			Move this functions to the `thread_management.c` file.
-// */
+/**
+*	TODO:	Implement `create_threads()` to handle thread creation and
+*			`join_threads()` to handle thread joining separately.
+*			Move this functions to the `thread_management.c` file.
+*/
 // void init(t_table *table)
 // {
 // 	size_t	i;

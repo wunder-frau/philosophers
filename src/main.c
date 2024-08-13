@@ -29,8 +29,7 @@ int main(int argc, char **argv)
 
 	ft_memset(&table, 0, sizeof(table));
 	is_args_valid(argc, argv, &table);
-	//table = allocate(intervals, atoi(argv[1]));
-	//assign(&table);
+	allocate(&table);
 	//init(&table);
 	//destroy_and_free(&table);
 	return (0);
