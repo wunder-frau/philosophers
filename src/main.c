@@ -42,5 +42,6 @@ int	main(int argc, char **argv)
 		destroy_and_free(&table);
 		return (1);
 	}
+	destroy_and_free(&table);
 	return (0);
 }
