@@ -31,8 +31,8 @@ bool	init(t_table *table)
 {
 	size_t	i;
 
-	// if (pthread_create(table->monitor, NULL, run_monitor, (void *) table) != 0)
-	// 	return (false);
+	if (pthread_create(table->monitor, NULL, monitoring, (void *) table) != 0)
+		return (false);
 	i = 0;
 	while (i < table->size)
 	{

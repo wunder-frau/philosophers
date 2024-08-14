@@ -37,7 +37,7 @@ typedef struct s_table
 	size_t	satiation_count;
 	t_time	action_gap;
 	t_time	init_time;
-	long	is_game_over;
+	long	game_over;
 	t_philo	*philosophers;
 	pthread_mutex_t	*mtx_philosophers;
 	pthread_mutex_t	*mtx_forks;
@@ -55,7 +55,6 @@ bool	allocate_philosophers(t_table *table, size_t size);
 bool	allocate_threads(t_table *table);
 bool		init(t_table *);
 // bool	init_mutex_array(int count, pthread_mutex_t **mutex);
-bool is_dead(t_philo *philo);
 
 /* utils.c */
 long	get_current_time(void);
@@ -81,5 +80,5 @@ int		wait_for_init_time_is_set(t_philo *philo);
 /* time_managment_utils.c */
 int		calculate_action_gap(t_time die, t_time eat, t_time sleep);
 
-void	*run_monitor(void *arg);
+void	*monitoring(void *arg);
 #endif

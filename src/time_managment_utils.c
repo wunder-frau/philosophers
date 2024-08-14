@@ -17,7 +17,7 @@ long	get_current_time(void)
  * Pauses execution for a specified duration while checking a termination condition.
  * 
  * The function records the start time, then repeatedly sleeps for 500 microseconds 
- * until the elapsed time reaches `msec` or until a termination condition (`is_game_over`) is met.
+ * until the elapsed time reaches `msec` or until a termination condition (`game_over`) is met.
  *
  * @param msec Duration in milliseconds to pause.
  * @param table Pointer to a `t_table` structure containing the termination condition and mutex.
@@ -28,7 +28,7 @@ void	ft_usleep(int msec, t_table *table)
 
 	usleep_start = get_current_time();
 	while (get_current_time() - usleep_start < msec
-		&& atomic_get(table->mtx_act, &table->is_game_over) == 0)
+		&& atomic_get(table->mtx_act, &table->game_over) == 0)
 		usleep(500);
 }
 
