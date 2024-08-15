@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 
 	memset(&table, 0, sizeof(table));
 	if (!is_args_valid(argc, argv, &table))
-		return(1);
+		return (1);
 	if (!allocate(&table))
 		return (1);
 	if (!init(&table))
