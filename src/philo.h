@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include "../libft_/libft.h"
 
 //: Time {{{
 typedef long t_time;
@@ -81,4 +80,12 @@ int		wait_for_init_time_is_set(t_philo *philo);
 int		calculate_action_gap(t_time die, t_time eat, t_time sleep);
 
 void	*monitoring(void *arg);
+
+/* auxiliary_functions.c */
+void	ft_putstr_fd(char *s, int fd);
+long	ft_atol(const char *str);
+void	*ft_calloc(size_t count, size_t size);
+int		ft_is_space(char c);
+int		ft_isdigit(int d);
+
 #endif
