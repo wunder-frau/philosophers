@@ -1,43 +1,47 @@
 NAME = philo
-CC = cc
-#CFLAGS = -g -Wall -Wextra -Werror
-CFLAGS = -fsanitize=address -g
+CC = gcc
+CFLAGS = -g -Wall -Wextra -Werror
+#CFLAGS = -fsanitize=address -g
 
 SRC_PATH = src/
 
 FILES_PATH = ./
-FILES_SRC = assign.c init.c log_action.c utils.c thread_management.c actions.c
+FILES_SRC = main.c assign.c init.c log_action.c time_managment_utils.c \
+			thread_management.c actions.c initialization_time.c\
+			atomic_operations.c destroy_and_free.c monitor.c auxiliary_functions.c
 
 OBJ_PATH = build/
 
-SRC = main.c \
-	$(addprefix $(FILES_PATH), $(FILES_SRC))
+SRC = $(addprefix $(FILES_PATH), $(FILES_SRC))
 
-LIBFT = libft/libft.a
 OBJ =	$(SRC:.c=.o)
 OBJS =	$(addprefix $(OBJ_PATH), $(OBJ))
 
 all: $(OBJ_PATH) $(NAME)
 
 $(NAME): $(OBJS)
-	# make -C ./libft
-	# @$(CC) $(CFLAGS) $(OBJS) ./libft/libft.a -o $(NAME)
+	@echo "🔗 Link objects to create the executable..."
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@echo "✅ Build complete: $(NAME)"
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@echo "🔨 Compiling $<..."
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_PATH):
 	mkdir $(OBJ_PATH)
+	@echo "📁 Create the build directory if it doesn't exist: $(OBJ_PATH)"
 
 clean:
-	# make clean -C ./libft
+	@echo "🧹 Cleaning up..."
 	@rm -rf $(OBJ_PATH)
+	@echo "🗑️  Removed build directory: $(OBJ_PATH)"
 
 fclean: clean
-	# make fclean -C ./libft
 	@rm -f $(NAME)
+	@echo "🚮 Removing executable: $(NAME)"
 
 re: fclean all
+	@echo "🔄  Rebuild the project: $(NAME)"
 
 .PHONY: all clean fclean re
