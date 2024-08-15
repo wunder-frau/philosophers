@@ -10,27 +10,27 @@ static void	increment_satiated_count(t_table *table)
 static void	handle_single_philos_act(t_philo *philo)
 {
 	log_action(philo, get_current_time(), "is thinking\n");
-	pthread_mutex_lock(philo->mtx_right);
+	pthread_mutex_lock(philo->forks[1]);
 	log_action(philo, get_current_time(), "has taken a fork\n");
 	ft_usleep(philo->table->die, philo->table);
-	pthread_mutex_unlock(philo->mtx_right);
+	pthread_mutex_unlock(philo->forks[1]);
 }
 
 static int	do_eat(t_philo *philo)
 {
 	int	status;
 
-	pthread_mutex_lock(philo->mtx_right);
+	pthread_mutex_lock(philo->forks[1]);
 	if (log_action(philo, get_current_time(), "has taken a fork\n") == 1)
 	{
-		pthread_mutex_unlock(philo->mtx_right);
+		pthread_mutex_unlock(philo->forks[1]);
 		return (1);
 	}
-	pthread_mutex_lock(philo->mtx_left);
+	pthread_mutex_lock(philo->forks[0]);
 	if (log_action(philo, get_current_time(), "has taken a fork\n") == 1)
 	{
-		pthread_mutex_unlock(philo->mtx_right);
-		pthread_mutex_unlock(philo->mtx_left);
+		pthread_mutex_unlock(philo->forks[1]);
+		pthread_mutex_unlock(philo->forks[0]);
 		return (1);
 	}
 	atomic_set(philo->mtx_philo, &philo->last_meal_time, get_current_time());
@@ -40,8 +40,8 @@ static int	do_eat(t_philo *philo)
 	philo->meal_count++;
 	if (philo->meal_count == philo->table->meal_count)
 		increment_satiated_count(philo->table);
-	pthread_mutex_unlock(philo->mtx_right);
-	pthread_mutex_unlock(philo->mtx_left);
+	pthread_mutex_unlock(philo->forks[1]);
+	pthread_mutex_unlock(philo->forks[0]);
 	return (status);
 }
 

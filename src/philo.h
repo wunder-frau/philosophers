@@ -18,8 +18,7 @@ typedef struct s_table t_table;
 typedef struct s_philo
 {
 	size_t			id;
-	pthread_mutex_t	*mtx_left;
-	pthread_mutex_t	*mtx_right;
+	pthread_mutex_t	*forks[2]; // 0 is left, 1 is right
 	long			meal_count;
 	long			last_meal_time;
 	pthread_mutex_t	*mtx_philo;
@@ -79,7 +78,7 @@ int		wait_for_init_time_is_set(t_philo *philo);
 /* time_managment_utils.c */
 int		calculate_action_gap(t_time die, t_time eat, t_time sleep);
 
-void	*monitoring(void *arg);
+void	*monitoring(void *table_ptr);
 
 /* auxiliary_functions.c */
 void	ft_putstr_fd(char *s, int fd);

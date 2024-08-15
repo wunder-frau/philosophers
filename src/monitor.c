@@ -54,12 +54,12 @@ static int	is_game_over(t_philo *philo)
 	return (philo->table->game_over);
 }
 
-void	*monitoring(void *arg)
+void	*monitoring(void *table_ptr)
 {
 	t_table	*table;
 	size_t		i;
 
-	table = (t_table *)arg;
+	table = (t_table *)table_ptr;
 	while (atomic_get(table->mtx_act, &table->init_time) == 0)
 		continue ;
 	if (table->init_time == -1)
