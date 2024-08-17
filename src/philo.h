@@ -82,7 +82,7 @@ void	*monitoring(void *table_ptr);
 
 /* auxiliary_functions.c */
 void	ft_putstr_fd(char *s, int fd);
-long	ft_atol(const char *str);
+long	ft_atol(char *str);
 void	*ft_calloc(size_t count, size_t size);
 int		ft_is_space(char c);
 int		ft_isdigit(int d);
