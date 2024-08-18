@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 08:53:11 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/18 10:45:25 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 00:47:00 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 static void	assign_forks(const t_table *table, t_philo *philo)
 {
 	philo->forks[1] = &(table->mtx_forks[philo->id]);
-	philo->forks[0] = &(table->mtx_forks[(philo->id + table->size - 1) % table->size]);
+	philo->forks[0] = &(table->mtx_forks[(philo->id + table->size - 1)
+			% table->size]);
 	if (philo->id + 1 == table->size)
 		swap(philo->forks[0], philo->forks[1]);
 }

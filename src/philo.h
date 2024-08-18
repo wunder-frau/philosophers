@@ -44,50 +44,60 @@ typedef struct s_table
 	pthread_t		*threads;
 }	t_table;
 
+typedef struct s_actions
+{
+	const char	*taken_fork;
+	const char	*died;
+	const char	*sleeping;
+	const char	*eating;
+	const char	*thinking;
+}	t_actions;
+
 /* actions.c */
-void	*act(void *philo_ptr);
+void		*act(void *philo_ptr);
 
 /* assign.c */
-bool	allocate_philosophers(t_table *table, size_t size);
-bool	allocate_threads(t_table *table);
-bool	allocate(t_table *table);
+bool		allocate_philosophers(t_table *table, size_t size);
+bool		allocate_threads(t_table *table);
+bool		allocate(t_table *table);
 
 /* atomics.c */
-long	atomic_get(pthread_mutex_t *mutex, long *variable);
-void	atomic_set(pthread_mutex_t *mutex, long *variable, long value);
+long		atomic_get(pthread_mutex_t *mutex, long *variable);
+void		atomic_set(pthread_mutex_t *mutex, long *variable, long value);
 
 /* destroy_and_free.c */
-void	destroy_and_free(t_table *table);
+void		destroy_and_free(t_table *table);
 
 /* init.c */
-bool	init(t_table *table);
+bool		init(t_table *table);
 
 /* log_action.c */
-bool	log_action(t_philo *philo, long time, char *act_msg);
+bool		log_action(t_philo *philo, long time, const char *act_msg);
 
 /* monitor */
-void	*monitoring(void *table_ptr);
+void		*monitoring(void *table_ptr);
 
 /* timing */
-long	get_curr_time(void);
-void	ft_usleep(int msec, t_table *table);
-void	set_action_gap(t_timing *t);
-void	set_start_time(t_table *table, size_t i);
-int		wait_for_init_time_is_set(t_philo *philo);
+long		get_curr_time(void);
+void		ft_usleep(int msec, t_table *table);
+void		set_action_gap(t_timing *t);
+void		set_start_time(t_table *table, size_t i);
+int			wait_for_init_time_is_set(t_philo *philo);
 
 /* utils_mtx.c */
-void	swap(pthread_mutex_t *a, pthread_mutex_t *b);
-void	destroy(pthread_mutex_t *mutexes, size_t n);
-bool	allocate_mutexes(pthread_mutex_t **mutexes, size_t size);
+void		swap(pthread_mutex_t *a, pthread_mutex_t *b);
+void		destroy(pthread_mutex_t *mutexes, size_t n);
+bool		allocate_mutexes(pthread_mutex_t **mutexes, size_t size);
 
 /* utils.c */
-int		ft_isdigit(int d);
-int		ft_is_space(char c);
-void	ft_putstr_fd(char *s, int fd);
-long	ft_atol(char *str);
-void	*ft_calloc(size_t count, size_t size);
+int			ft_isdigit(int d);
+int			ft_is_space(char c);
+void		ft_putstr_fd(char *s, int fd);
+long		ft_atol(char *str);
+void		*ft_calloc(size_t count, size_t size);
 
 /* validation.c */
-bool	is_args_valid(int argc, char **argv, t_table *table);
+t_actions	create_actions(void);
+bool		is_args_valid(int argc, char **argv, t_table *table);
 
 #endif

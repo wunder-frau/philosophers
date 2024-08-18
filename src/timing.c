@@ -7,6 +7,7 @@ long	get_curr_time(void)
 {
 	struct timeval	curr_time;
 	long			timestamp;
+
 	gettimeofday(&curr_time, NULL);
 	timestamp = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
 	return (timestamp);
@@ -48,7 +49,6 @@ void	set_action_gap(t_timing *t)
 		t->action_gap = 0;
 }
 
-
 /**
  * Sets the initialization time for the table based on the number
  * of created philosopher threads.
@@ -65,7 +65,8 @@ void	set_action_gap(t_timing *t)
  */
 void	set_start_time(t_table *table, size_t i)
 {
-	if (i != table->size) {
+	if (i != table->size)
+	{
 		table->timing.start = -1;
 		return ;
 	}

@@ -1,5 +1,17 @@
 #include "philo.h"
 
+t_actions	create_actions(void)
+{
+	t_actions	actions;
+
+	actions.taken_fork = "has taken a fork\n";
+	actions.died = "has died\n";
+	actions.sleeping = "is sleeping\n";
+	actions.eating = "is eating\n";
+	actions.thinking = "is thinking\n";
+	return (actions);
+}
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
