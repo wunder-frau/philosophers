@@ -78,7 +78,6 @@ bool	is_args_valid(int argc, char **argv, t_table *table)
 	// 	return (false);
 	// }
 	table->action_gap = calculate_action_gap(table->die, table->eat, table->sleep);
-	printf("%zu\n", table->action_gap);
 	return (true);
 }
 

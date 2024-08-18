@@ -14,8 +14,7 @@
 static bool	is_dead(t_philo *philo)
 {
 	long	last_meal_time;
-
-	last_meal_time = atomic_get(philo->mtx_philo, &philo->last_meal_time);
+	last_meal_time = philo->last_meal_time;
 	if (last_meal_time == 0)
 		last_meal_time = philo->table->init_time;
 	if (get_current_time() >= last_meal_time + philo->table->die)
@@ -60,9 +59,7 @@ void	*monitoring(void *table_ptr)
 	size_t		i;
 
 	table = (t_table *)table_ptr;
-	while (atomic_get(table->mtx_act, &table->init_time) == 0)
-		continue ;
-	if (table->init_time == -1)
+	if (atomic_get(table->mtx_act, &table->init_time) == -1)
 		return (NULL);
 	ft_usleep(30, table);
 	while (true)

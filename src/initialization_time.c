@@ -14,9 +14,9 @@
 void	set_init_time(t_table *table, size_t i)
 {
 	if (i == table->size)
-		atomic_set(table->mtx_act, &table->init_time, get_current_time());
+		table->init_time = get_current_time();
 	else
-		atomic_set(table->mtx_act, &table->init_time, -1);
+		table->init_time = -1;
 }
 
 /**
@@ -28,14 +28,10 @@ void	set_init_time(t_table *table, size_t i)
 int	wait_for_init_time_is_set(t_philo *philo)
 {
 	t_table	*table;
-	long	init_time;
 
 	table = philo->table;
-	while (atomic_get(table->mtx_act, &table->init_time) == 0)
-		continue ;
-	init_time = table->init_time;
-	if (init_time == -1)
+	philo->last_meal_time = atomic_get(table->mtx_act, &table->init_time);
+	if (philo->last_meal_time == -1)
 		return (1);
-	atomic_set(philo->mtx_philo, &philo->last_meal_time, init_time);
 	return (0);
 }

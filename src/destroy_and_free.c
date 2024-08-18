@@ -4,8 +4,6 @@ void	destroy_and_free(t_table *table)
 {
 	if (table->philosophers)
 		free(table->philosophers);
-	if (table->mtx_philosophers)
-		destroy(table->mtx_philosophers, table->size);
 	if (table->mtx_forks)
 		destroy(table->mtx_forks, table->size);
 	if (table->mtx_act)

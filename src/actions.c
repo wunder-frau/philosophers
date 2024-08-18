@@ -33,7 +33,7 @@ static int	do_eat(t_philo *philo)
 		pthread_mutex_unlock(philo->forks[0]);
 		return (1);
 	}
-	atomic_set(philo->mtx_philo, &philo->last_meal_time, get_current_time());
+	atomic_set(philo->table->mtx_act, &philo->last_meal_time, get_current_time());
 	status = log_action(philo, philo->last_meal_time, "is eating\n");
 	if (status == 0)
 		ft_usleep(philo->table->eat, philo->table);

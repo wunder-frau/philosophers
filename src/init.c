@@ -31,6 +31,7 @@ bool	init(t_table *table)
 {
 	size_t	i;
 
+	pthread_mutex_lock(table->mtx_act);
 	if (pthread_create(table->monitor, NULL, monitoring, (void *) table) != 0)
 		return (false);
 	i = 0;
@@ -45,6 +46,7 @@ bool	init(t_table *table)
 		i++;
 	}
 	set_init_time(table, i);
+	pthread_mutex_unlock(table->mtx_act);
 	join_pthreads(table, i);
 	return (i == table->size);
 }

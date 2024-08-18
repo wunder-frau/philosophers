@@ -13,7 +13,6 @@ static void	swap(pthread_mutex_t *a, pthread_mutex_t *b)
  */
 static void	assign_forks(const t_table *table, t_philo *philo)
 {
-	printf("%zu philosopher will recieve {%zu, %zu} forks\n", philo->id, philo->id, (philo->id + table->size - 1) % table->size);
 	philo->forks[1] = &(table->mtx_forks[philo->id]);
 	philo->forks[0] = &(table->mtx_forks[(philo->id + table->size - 1) % table->size]);
 	if (philo->id + 1 == table->size)
@@ -75,8 +74,6 @@ bool	allocate_philosophers(t_table *table, size_t size)
 		philosophers[i].id = i;
 		philosophers[i].table = table;
 		assign_forks(table, &philosophers[i]);
-		philosophers[i].mtx_philo = &table->mtx_philosophers[i];
-		printf("Initialized philosopher %zu with ID %zu\n", i, philosophers[i].id);
 		i++;
 	}
 	table->philosophers = philosophers;
@@ -103,8 +100,6 @@ bool	allocate_threads(t_table *table)
 bool	allocate(t_table *table)
 {
 	if (!allocate_mutexes(&(table->mtx_forks), table->size))
-		return (false);
-	if (!allocate_mutexes(&(table->mtx_philosophers), table->size))
 		return (false);
 	if (!allocate_mutexes(&(table->mtx_act), 1))
 		return (false);

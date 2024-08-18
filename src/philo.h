@@ -21,7 +21,6 @@ typedef struct s_philo
 	pthread_mutex_t	*forks[2]; // 0 is left, 1 is right
 	long			meal_count;
 	long			last_meal_time;
-	pthread_mutex_t	*mtx_philo;
 	t_table			*table;
 } t_philo;
 
@@ -37,7 +36,6 @@ typedef struct s_table
 	t_time	init_time;
 	long	game_over;
 	t_philo	*philosophers;
-	pthread_mutex_t	*mtx_philosophers;
 	pthread_mutex_t	*mtx_forks;
 	pthread_mutex_t	*mtx_act;
 	pthread_t		*monitor;
