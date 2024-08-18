@@ -8,7 +8,7 @@ FILES_PATH = ./
 FILES_SRC = main.c \
 			assign.c actions.c atomics.c destroy_and_free.c \
 			init.c timing.c log_action.c monitor.c utils.c \
-			utils_mtx.c validation.c
+			utils_actions.c utils_mtx.c validation.c
 
 OBJ_PATH = build/
 

@@ -1,16 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/19 02:15:25 by istasheu          #+#    #+#             */
+/*   Updated: 2024/08/19 02:17:02 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
-
-t_actions	create_actions(void)
-{
-	t_actions	actions;
-
-	actions.taken_fork = "has taken a fork\n";
-	actions.died = "has died\n";
-	actions.sleeping = "is sleeping\n";
-	actions.eating = "is eating\n";
-	actions.thinking = "is thinking\n";
-	return (actions);
-}
 
 size_t	ft_strlen(const char *s)
 {
@@ -22,10 +22,9 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static long	str_to_long_if_numeric(char *str)
+static bool	str_to_long_if_numeric(char *str)
 {
 	long	len;
-	char	*original_str;
 
 	len = ft_strlen(str);
 	if (len > 8)
@@ -33,7 +32,6 @@ static long	str_to_long_if_numeric(char *str)
 		ft_putstr_fd("Error: Number must have no more than 8 digits.\n", 2);
 		exit(1);
 	}
-	original_str = str;
 	while (*str)
 	{
 		if (!ft_isdigit((unsigned char)*str))
@@ -43,25 +41,41 @@ static long	str_to_long_if_numeric(char *str)
 		}
 		str++;
 	}
-	return (ft_atol(original_str));
+	return (true);
 }
 
-bool	is_args_valid(int argc, char **argv, t_table *table)
+static bool	is_args_valid(int argc, char **argv)
 {
+	int	i;
+
 	if (argc != 5 && argc != 6)
 	{
-		ft_putstr_fd("Usage: %s number_of_philosophers "
-			"time_to_die time_to_eat time_to_sleep\n", 2);
+		ft_putstr_fd("Usage: %s number_of_philosophers time_to_die "
+			"time_to_eat time_to_sleep [optional: number_of_meals]\n", 2);
 		exit(1);
 	}
-	table->size = str_to_long_if_numeric(argv[1]);
-	table->timing.die = (t_time)str_to_long_if_numeric(argv[2]);
-	table->timing.eat = (t_time)str_to_long_if_numeric(argv[3]);
-	table->timing.sleep = (t_time)str_to_long_if_numeric(argv[4]);
-	if (argc == 6)
-		table->meal_count = str_to_long_if_numeric(argv[5]);
-	else
-		table->meal_count = -1;
-	set_action_gap(&table->timing);
+	i = 1;
+	while (i < argc)
+	{
+		if (!str_to_long_if_numeric(argv[i]))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	parse_and_assign_args(int argc, char **argv, t_table *table)
+{
+	if (is_args_valid(argc, argv) == true)
+	{
+		table->size = ft_atol(argv[1]);
+		table->timing.die = (t_time)ft_atol(argv[2]);
+		table->timing.eat = (t_time)ft_atol(argv[3]);
+		table->timing.sleep = (t_time)ft_atol(argv[4]);
+		if (argc == 6)
+			table->meal_count = ft_atol(argv[5]);
+		else
+			table->meal_count = -1;
+	}
 	return (true);
 }

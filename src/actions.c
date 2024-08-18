@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 08:52:09 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 00:53:14 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 01:24:57 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,7 @@ static int	handle_philososophers_act(t_philo *philo, t_actions *actions)
 {
 	if (log_action(philo, get_curr_time(), actions->thinking) == 1)
 		return (1);
-	if (philo->id % 2 != 0 && philo->meal_count == 0)
-		ft_usleep(philo->table->timing.eat / 2, philo->table);
-	if (philo->table->size % 2 != 0 && philo->meal_count != 0)
-		ft_usleep(philo->table->timing.action_gap, philo->table);
+	wait_for_appropriate_time(philo);
 	if (do_eat(philo, actions) == 1)
 		return (1);
 	if (log_action(philo, get_curr_time(), actions->sleeping) == 1)

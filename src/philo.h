@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/19 02:14:42 by istasheu          #+#    #+#             */
+/*   Updated: 2024/08/19 02:14:44 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -84,6 +96,10 @@ void		set_action_gap(t_timing *t);
 void		set_start_time(t_table *table, size_t i);
 int			wait_for_init_time_is_set(t_philo *philo);
 
+/* utils_actions.c */
+t_actions	create_actions(void);
+void		wait_for_appropriate_time(t_philo *philo);
+
 /* utils_mtx.c */
 void		swap(pthread_mutex_t *a, pthread_mutex_t *b);
 void		destroy(pthread_mutex_t *mutexes, size_t n);
@@ -97,7 +113,6 @@ long		ft_atol(char *str);
 void		*ft_calloc(size_t count, size_t size);
 
 /* validation.c */
-t_actions	create_actions(void);
-bool		is_args_valid(int argc, char **argv, t_table *table);
+bool		parse_and_assign_args(int argc, char **argv, t_table *table);
 
 #endif
