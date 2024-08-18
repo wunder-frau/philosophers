@@ -5,9 +5,9 @@ CFLAGS = -Wall -Wextra -Werror
 SRC_PATH = src/
 
 FILES_PATH = ./
-FILES_SRC = main.c assign.c init.c log_action.c time_managment_utils.c \
-			thread_management.c actions.c initialization_time.c\
-			atomic_operations.c destroy_and_free.c monitor.c auxiliary_functions.c
+FILES_SRC = main.c assign.c actions.c atomic_operations.c destroy_and_free.c \
+			init.c initialization_time.c log_action.c monitor.c utils.c \
+			utils_mtx.c utils_time_managment.c validation.c
 
 OBJ_PATH = build/
 

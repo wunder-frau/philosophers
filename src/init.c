@@ -21,11 +21,14 @@ static void	join_pthreads(t_table *table, int size)
 /**
  * Initializes philosopher threads and sets the init_time time.
  * Attempts to create all philosopher threads using `pthread_create`.
- * If thread creation fails, it breaks out of the loop and sets the init_time time to -1.
- * If all threads are created successfully, it sets the init_time time and waits for all threads to finish.
+ * If thread creation fails, it breaks out of the loop and sets the 
+ * init_time time to -1. If all threads are created successfully,
+ * it sets the init_time time and waits for all threads to finish.
  *
- * @param table Pointer to the table structure containing thread and mutex information.
- * @return True if all threads were successfully created and initialized, otherwise false.
+ * @param table Pointer to the table structure containing
+ * 				thread and mutex information.
+ * @return True if all threads were successfully
+ *			created and initialized, otherwise false.
  */
 bool	init(t_table *table)
 {
@@ -38,7 +41,7 @@ bool	init(t_table *table)
 	while (i < table->size)
 	{
 		if (pthread_create(&table->threads[i], NULL,
-			act, (void *)&((table->philosophers)[i])) != 0)
+				act, (void *)&((table->philosophers)[i])) != 0)
 		{
 			ft_putstr_fd("Error: philosopher thread_create failed\n", 2);
 			break ;

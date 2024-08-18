@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   actions.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/18 08:52:09 by istasheu          #+#    #+#             */
+/*   Updated: 2024/08/18 08:52:13 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	increment_satiated_count(t_table *table)
@@ -9,9 +21,9 @@ static void	increment_satiated_count(t_table *table)
 
 static void	handle_single_philos_act(t_philo *philo)
 {
-	log_action(philo, get_current_time(), "is thinking\n");
+	log_action(philo, get_cur_time(), "is thinking\n");
 	pthread_mutex_lock(philo->forks[1]);
-	log_action(philo, get_current_time(), "has taken a fork\n");
+	log_action(philo, get_cur_time(), "has taken a fork\n");
 	ft_usleep(philo->table->die, philo->table);
 	pthread_mutex_unlock(philo->forks[1]);
 }
@@ -21,19 +33,19 @@ static int	do_eat(t_philo *philo)
 	int	status;
 
 	pthread_mutex_lock(philo->forks[1]);
-	if (log_action(philo, get_current_time(), "has taken a fork\n") == 1)
+	if (log_action(philo, get_cur_time(), "has taken a fork\n") == 1)
 	{
 		pthread_mutex_unlock(philo->forks[1]);
 		return (1);
 	}
 	pthread_mutex_lock(philo->forks[0]);
-	if (log_action(philo, get_current_time(), "has taken a fork\n") == 1)
+	if (log_action(philo, get_cur_time(), "has taken a fork\n") == 1)
 	{
 		pthread_mutex_unlock(philo->forks[1]);
 		pthread_mutex_unlock(philo->forks[0]);
 		return (1);
 	}
-	atomic_set(philo->table->mtx_act, &philo->last_meal_time, get_current_time());
+	atomic_set(philo->table->mtx_act, &philo->last_meal_time, get_cur_time());
 	status = log_action(philo, philo->last_meal_time, "is eating\n");
 	if (status == 0)
 		ft_usleep(philo->table->eat, philo->table);
@@ -47,7 +59,7 @@ static int	do_eat(t_philo *philo)
 
 static int	handle_philososophers_act(t_philo *philo)
 {
-	if (log_action(philo, get_current_time(), "is thinking\n") == 1)
+	if (log_action(philo, get_cur_time(), "is thinking\n") == 1)
 		return (1);
 	if (philo->id % 2 != 0 && philo->meal_count == 0)
 		ft_usleep(philo->table->eat / 2, philo->table);
@@ -56,7 +68,7 @@ static int	handle_philososophers_act(t_philo *philo)
 		ft_usleep(philo->table->action_gap, philo->table);
 	if (do_eat(philo) == 1)
 		return (1);
-	if (log_action(philo, get_current_time(), "is sleeping\n") == 1)
+	if (log_action(philo, get_cur_time(), "is sleeping\n") == 1)
 		return (1);
 	ft_usleep(philo->table->sleep, philo->table);
 	return (0);

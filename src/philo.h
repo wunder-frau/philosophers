@@ -53,7 +53,7 @@ bool		init(t_table *);
 // bool	init_mutex_array(int count, pthread_mutex_t **mutex);
 
 /* utils.c */
-long	get_current_time(void);
+long	get_cur_time(void);
 void	ft_usleep(int msec, t_table *table);
 void	destroy_and_free(t_table *table);
 
@@ -84,5 +84,7 @@ long	ft_atol(char *str);
 void	*ft_calloc(size_t count, size_t size);
 int		ft_is_space(char c);
 int		ft_isdigit(int d);
+
+void	swap(pthread_mutex_t *a, pthread_mutex_t *b);
 
 #endif
