@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 08:52:09 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/18 08:52:13 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/18 10:53:36 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	increment_satiated_count(t_table *table)
 
 static void	handle_single_philos_act(t_philo *philo)
 {
-	log_action(philo, get_cur_time(), "is thinking\n");
+	log_action(philo, get_curr_time(), "is thinking\n");
 	pthread_mutex_lock(philo->forks[1]);
-	log_action(philo, get_cur_time(), "has taken a fork\n");
-	ft_usleep(philo->table->die, philo->table);
+	log_action(philo, get_curr_time(), "has taken a fork\n");
+	ft_usleep(philo->table->timing.die, philo->table);
 	pthread_mutex_unlock(philo->forks[1]);
 }
 
@@ -33,22 +33,22 @@ static int	do_eat(t_philo *philo)
 	int	status;
 
 	pthread_mutex_lock(philo->forks[1]);
-	if (log_action(philo, get_cur_time(), "has taken a fork\n") == 1)
+	if (log_action(philo, get_curr_time(), "has taken a fork\n") == 1)
 	{
 		pthread_mutex_unlock(philo->forks[1]);
 		return (1);
 	}
 	pthread_mutex_lock(philo->forks[0]);
-	if (log_action(philo, get_cur_time(), "has taken a fork\n") == 1)
+	if (log_action(philo, get_curr_time(), "has taken a fork\n") == 1)
 	{
 		pthread_mutex_unlock(philo->forks[1]);
 		pthread_mutex_unlock(philo->forks[0]);
 		return (1);
 	}
-	atomic_set(philo->table->mtx_act, &philo->last_meal_time, get_cur_time());
+	atomic_set(philo->table->mtx_act, &philo->last_meal_time, get_curr_time());
 	status = log_action(philo, philo->last_meal_time, "is eating\n");
 	if (status == 0)
-		ft_usleep(philo->table->eat, philo->table);
+		ft_usleep(philo->table->timing.eat, philo->table);
 	philo->meal_count++;
 	if (philo->meal_count == philo->table->meal_count)
 		increment_satiated_count(philo->table);
@@ -59,18 +59,17 @@ static int	do_eat(t_philo *philo)
 
 static int	handle_philososophers_act(t_philo *philo)
 {
-	if (log_action(philo, get_cur_time(), "is thinking\n") == 1)
+	if (log_action(philo, get_curr_time(), "is thinking\n") == 1)
 		return (1);
 	if (philo->id % 2 != 0 && philo->meal_count == 0)
-		ft_usleep(philo->table->eat / 2, philo->table);
-	if (philo->table->size % 2 != 0
-		&& philo->meal_count != 0)
-		ft_usleep(philo->table->action_gap, philo->table);
+		ft_usleep(philo->table->timing.eat / 2, philo->table);
+	if (philo->table->size % 2 != 0 && philo->meal_count != 0)
+		ft_usleep(philo->table->timing.action_gap, philo->table);
 	if (do_eat(philo) == 1)
 		return (1);
-	if (log_action(philo, get_cur_time(), "is sleeping\n") == 1)
+	if (log_action(philo, get_curr_time(), "is sleeping\n") == 1)
 		return (1);
-	ft_usleep(philo->table->sleep, philo->table);
+	ft_usleep(philo->table->timing.sleep, philo->table);
 	return (0);
 }
 
@@ -81,13 +80,14 @@ void	*act(void *philo_ptr)
 	philo = (t_philo *)philo_ptr;
 	if (wait_for_init_time_is_set(philo) == 1)
 		return (NULL);
-	if (philo->table->size == 1)
+	if (philo->table->size == 1) {
 		handle_single_philos_act(philo);
-	else
+		return (NULL);
+	}
+	while (true)
 	{
-		while (1)
-			if (handle_philososophers_act(philo) == 1)
-				break ;
+		if (handle_philososophers_act(philo) == 1)
+			break ;
 	}
 	return (NULL);
 }

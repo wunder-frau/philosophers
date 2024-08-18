@@ -43,14 +43,13 @@ bool	is_args_valid(int argc, char **argv, t_table *table)
 		exit(1);
 	}
 	table->size = has_no_more_than_8_digits(argv[1]);
-	table->die = (t_time)has_no_more_than_8_digits(argv[2]);
-	table->eat = (t_time)has_no_more_than_8_digits(argv[3]);
-	table->sleep = (t_time)has_no_more_than_8_digits(argv[4]);
+	table->timing.die = (t_time)has_no_more_than_8_digits(argv[2]);
+	table->timing.eat = (t_time)has_no_more_than_8_digits(argv[3]);
+	table->timing.sleep = (t_time)has_no_more_than_8_digits(argv[4]);
 	if (argc == 6)
 		table->meal_count = has_no_more_than_8_digits(argv[5]);
 	else
 		table->meal_count = -1;
-	table->action_gap = calculate_action_gap(table->die,
-			table->eat, table->sleep);
+	set_action_gap(&table->timing);
 	return (true);
 }

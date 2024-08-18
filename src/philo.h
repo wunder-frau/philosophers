@@ -12,9 +12,9 @@
 //: Time {{{
 typedef long t_time;
 //: }}}
-typedef struct s_table t_table;
 
 //: Philosophical room {{{
+typedef struct s_table t_table;
 typedef struct s_philo
 {
 	size_t			id;
@@ -24,17 +24,22 @@ typedef struct s_philo
 	t_table			*table;
 } t_philo;
 
-typedef struct s_table
+typedef struct s_timing
 {
-	size_t	size; // there are as many forks as philosophers
 	t_time	die;
 	t_time	eat;
 	t_time	sleep;
+	t_time	start;
+	t_time	action_gap;
+} t_timing;
+
+typedef struct s_table
+{
+	size_t	size; // there are as many forks as philosophers
+	t_timing	timing;
 	long	meal_count;
 	size_t	satiation_count;
-	t_time	action_gap;
-	t_time	init_time;
-	long	game_over;
+	bool	is_game_over;
 	t_philo	*philosophers;
 	pthread_mutex_t	*mtx_forks;
 	pthread_mutex_t	*mtx_act;
@@ -49,11 +54,11 @@ bool	allocate(t_table *table);
 void	assign(t_table *);
 bool	allocate_philosophers(t_table *table, size_t size);
 bool	allocate_threads(t_table *table);
-bool		init(t_table *);
+bool	init(t_table *);
 // bool	init_mutex_array(int count, pthread_mutex_t **mutex);
 
 /* utils.c */
-long	get_cur_time(void);
+long	get_curr_time(void);
 void	ft_usleep(int msec, t_table *table);
 void	destroy_and_free(t_table *table);
 
@@ -70,11 +75,11 @@ long	atomic_get(pthread_mutex_t *mutex, long *variable);
 
 
 /* initialization_time.c */
-void	set_init_time(t_table *table, size_t i);
+void	set_start_time(t_table *table, size_t i);
 int		wait_for_init_time_is_set(t_philo *philo);
 
 /* time_managment_utils.c */
-int		calculate_action_gap(t_time die, t_time eat, t_time sleep);
+void	set_action_gap(t_timing *t);
 
 void	*monitoring(void *table_ptr);
 

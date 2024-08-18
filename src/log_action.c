@@ -10,9 +10,9 @@ bool	log_action(t_philo *philo, long time, char *act_msg)
 
 	table = philo->table;
 	pthread_mutex_lock(table->mtx_act);
-	if (table->game_over == 0)
+	if (table->is_game_over == 0)
 	{
-		printf("%zu\t%zu\t%s", time - table->init_time, philo->id + 1, act_msg);
+		printf("%zu\t%zu\t%s", time - table->timing.start, philo->id + 1, act_msg);
 		pthread_mutex_unlock(table->mtx_act);
 		return (false);
 	}

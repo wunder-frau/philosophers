@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 08:53:11 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/18 09:47:33 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/18 10:45:25 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,10 @@ bool	allocate_threads(t_table *table)
  */
 bool	allocate(t_table *table)
 {
-	if (!allocate_mutexes(&(table->mtx_forks), table->size))
-		return (false);
-	if (!allocate_mutexes(&(table->mtx_act), 1))
-		return (false);
-	if (!allocate_philosophers(table, table->size))
-		return (false);
-	if (!allocate_threads(table))
+	if (!allocate_mutexes(&(table->mtx_forks), table->size)
+		|| !allocate_mutexes(&(table->mtx_act), 1)
+		|| !allocate_philosophers(table, table->size)
+		|| !allocate_threads(table))
 	{
 		destroy_and_free(table);
 		return (false);

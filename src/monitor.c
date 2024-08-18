@@ -17,12 +17,12 @@ static bool	is_dead(t_philo *philo)
 
 	last_meal_time = philo->last_meal_time;
 	if (last_meal_time == 0)
-		last_meal_time = philo->table->init_time;
-	if (get_cur_time() >= last_meal_time + philo->table->die)
+		last_meal_time = philo->table->timing.start;
+	if (get_curr_time() >= last_meal_time + philo->table->timing.die)
 	{
-		printf("%ld\t%ld\t%s", get_cur_time() - philo->table->init_time,
+		printf("%ld\t%ld\t%s", get_curr_time() - philo->table->timing.start,
 			philo->id + 1, "has died\n");
-		philo->table->game_over = 1;
+		philo->table->is_game_over = 1;
 		return (true);
 	}
 	return (false);
@@ -35,11 +35,11 @@ static bool	is_dead(t_philo *philo)
  * This function locks the mutex to ensure safe access to the
  * shared game state data. It first checks if all philosophers
  * have reached their required meal count. If true, the function
- * sets the `game_over` flag, unlocks the mutex, and returns 1,
+ * sets the `is_game_over` flag, unlocks the mutex, and returns 1,
  * indicating the game is over. If not all philosophers are satiated,
  * the function proceeds to check if any philosopher has died
  * using the `is_dead` function. The mutex is then unlocked, and the
- * function returns the current state of the `game_over` flag.
+ * function returns the current state of the `is_game_over` flag.
  *
  * @param philo Pointer to the philosopher's data structure.
  * @return 1 if the game is over due to satiation or death, otherwise 0.
@@ -49,13 +49,13 @@ static int	is_game_over(t_philo *philo)
 	pthread_mutex_lock(philo->table->mtx_act);
 	if (philo->table->satiation_count == philo->table->size)
 	{
-		philo->table->game_over = 1;
+		philo->table->is_game_over = 1;
 		pthread_mutex_unlock(philo->table->mtx_act);
 		return (1);
 	}
 	is_dead(philo);
 	pthread_mutex_unlock(philo->table->mtx_act);
-	return (philo->table->game_over);
+	return (philo->table->is_game_over);
 }
 
 void	*monitoring(void *table_ptr)
@@ -64,7 +64,7 @@ void	*monitoring(void *table_ptr)
 	size_t	i;
 
 	table = (t_table *)table_ptr;
-	if (atomic_get(table->mtx_act, &table->init_time) == -1)
+	if (atomic_get(table->mtx_act, &table->timing.start) == -1)
 		return (NULL);
 	ft_usleep(30, table);
 	while (true)
