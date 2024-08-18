@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 02:15:25 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 02:17:02 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 02:35:49 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static bool	str_to_long_if_numeric(char *str)
 		ft_putstr_fd("Error: Number must have no more than 8 digits.\n", 2);
 		exit(1);
 	}
+	if (str == NULL || *str == '\0')
+		return (false);
 	while (*str)
 	{
 		if (!ft_isdigit((unsigned char)*str))
@@ -76,6 +78,12 @@ bool	parse_and_assign_args(int argc, char **argv, t_table *table)
 			table->meal_count = ft_atol(argv[5]);
 		else
 			table->meal_count = -1;
+		if (table->size < 1 || table->timing.die < 1 || table->timing.eat < 1
+				|| table->timing.sleep < 1)
+		{
+			ft_putstr_fd("Error: All arguments must be positive integers.\n", 2);
+			return (false);
+		}
 	}
 	return (true);
 }
