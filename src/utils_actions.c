@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 02:14:56 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 09:25:00 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 16:53:43 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_actions	create_actions(void)
 void	set_delay_for_odd(t_philo *philo)
 {
 	if (philo->id % 2 != 0 && philo->meal_count == 0)
-		ft_usleep(philo->table->timing.action_gap, philo->table);
+		ft_usleep(philo->table->timing.eat, philo->table);
 	else if (philo->table->size % 2 != 0 && philo->meal_count != 0)
 		ft_usleep(philo->table->timing.action_gap, philo->table);
 }

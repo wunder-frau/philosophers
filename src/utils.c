@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 02:15:12 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 02:15:13 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 13:15:35 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ long	ft_atol(char *str)
 	sign = 1;
 	while (ft_is_space((unsigned char)*str))
 		str++;
-	if (*str == '-' || *str == '+') 
+	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
 			sign = -1;
