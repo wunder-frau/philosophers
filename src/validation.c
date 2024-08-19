@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 02:15:25 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 02:35:49 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 02:40:36 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ bool	parse_and_assign_args(int argc, char **argv, t_table *table)
 		else
 			table->meal_count = -1;
 		if (table->size < 1 || table->timing.die < 1 || table->timing.eat < 1
-				|| table->timing.sleep < 1)
+			|| table->timing.sleep < 1)
 		{
 			ft_putstr_fd("Error: All arguments must be positive integers.\n", 2);
 			return (false);

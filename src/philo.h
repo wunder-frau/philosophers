@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 02:14:42 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 02:14:44 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 09:25:00 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int			wait_for_init_time_is_set(t_philo *philo);
 
 /* utils_actions.c */
 t_actions	create_actions(void);
-void		wait_for_appropriate_time(t_philo *philo);
+void		set_delay_for_odd(t_philo *philo);
 
 /* utils_mtx.c */
 void		swap(pthread_mutex_t *a, pthread_mutex_t *b);

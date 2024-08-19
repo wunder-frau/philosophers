@@ -6,7 +6,7 @@
 /*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 08:52:09 by istasheu          #+#    #+#             */
-/*   Updated: 2024/08/19 01:24:57 by istasheu         ###   ########.fr       */
+/*   Updated: 2024/08/19 09:37:17 by istasheu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	handle_philososophers_act(t_philo *philo, t_actions *actions)
 {
 	if (log_action(philo, get_curr_time(), actions->thinking) == 1)
 		return (1);
-	wait_for_appropriate_time(philo);
+	set_delay_for_odd(philo);
 	if (do_eat(philo, actions) == 1)
 		return (1);
 	if (log_action(philo, get_curr_time(), actions->sleeping) == 1)
