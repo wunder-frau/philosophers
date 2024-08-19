@@ -1,14 +1,14 @@
 NAME = philo
-CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror
-#CFLAGS = -fsanitize=address -g
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
 SRC_PATH = src/
 
 FILES_PATH = ./
-FILES_SRC = main.c assign.c init.c log_action.c time_managment_utils.c \
-			thread_management.c actions.c initialization_time.c\
-			atomic_operations.c destroy_and_free.c monitor.c auxiliary_functions.c
+FILES_SRC = main.c \
+			assign.c actions.c atomics.c destroy_and_free.c \
+			init.c timing.c log_action.c monitor.c utils.c \
+			utils_actions.c utils_mtx.c validation.c
 
 OBJ_PATH = build/
 
@@ -35,13 +35,13 @@ $(OBJ_PATH):
 clean:
 	@echo "🧹 Cleaning up..."
 	@rm -rf $(OBJ_PATH)
-	@echo "🗑️  Removed build directory: $(OBJ_PATH)"
+	@echo "🗑️ Removed build directory: $(OBJ_PATH)"
 
 fclean: clean
 	@rm -f $(NAME)
 	@echo "🚮 Removing executable: $(NAME)"
 
 re: fclean all
-	@echo "🔄  Rebuild the project: $(NAME)"
+	@echo "🔄 Rebuild the project: $(NAME)"
 
 .PHONY: all clean fclean re

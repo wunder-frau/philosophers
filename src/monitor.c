@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/19 02:14:35 by istasheu          #+#    #+#             */
+/*   Updated: 2024/08/19 02:14:36 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 /**
@@ -15,27 +27,31 @@ static bool	is_dead(t_philo *philo)
 {
 	long	last_meal_time;
 
-	last_meal_time = atomic_get(philo->mtx_philo, &philo->last_meal_time);
+	last_meal_time = philo->last_meal_time;
 	if (last_meal_time == 0)
-		last_meal_time = philo->table->init_time;
-	if (get_current_time() >= last_meal_time + philo->table->die)
+		last_meal_time = philo->table->timing.start;
+	if (get_curr_time() >= last_meal_time + philo->table->timing.die)
 	{
-		printf("%ld\t%ld\t%s", get_current_time() - philo->table->init_time, philo->id + 1, "has died\n");
-		philo->table->game_over = 1;
+		printf("%ld\t%ld\t%s", get_curr_time() - philo->table->timing.start,
+			philo->id + 1, "has died\n");
+		philo->table->is_game_over = 1;
 		return (true);
 	}
 	return (false);
 }
 
 /**
- * Checks if the simulation should end due to all philosophers being satiated or a philosopher's death.
+ * Checks if the simulation should end due to all philosophers
+ * being satiated or a philosopher's death.
  *
- * This function locks the mutex to ensure safe access to the shared game state data.
- * It first checks if all philosophers have reached their required meal count. If true,
- * the function sets the `game_over` flag, unlocks the mutex, and returns 1, indicating the game is over.
- * If not all philosophers are satiated, the function proceeds to check if any philosopher has died
- * using the `is_dead` function. The mutex is then unlocked, and the function returns the current state
- * of the `game_over` flag.
+ * This function locks the mutex to ensure safe access to the
+ * shared game state data. It first checks if all philosophers
+ * have reached their required meal count. If true, the function
+ * sets the `is_game_over` flag, unlocks the mutex, and returns 1,
+ * indicating the game is over. If not all philosophers are satiated,
+ * the function proceeds to check if any philosopher has died
+ * using the `is_dead` function. The mutex is then unlocked, and the
+ * function returns the current state of the `is_game_over` flag.
  *
  * @param philo Pointer to the philosopher's data structure.
  * @return 1 if the game is over due to satiation or death, otherwise 0.
@@ -45,24 +61,22 @@ static int	is_game_over(t_philo *philo)
 	pthread_mutex_lock(philo->table->mtx_act);
 	if (philo->table->satiation_count == philo->table->size)
 	{
-		philo->table->game_over = 1;
+		philo->table->is_game_over = 1;
 		pthread_mutex_unlock(philo->table->mtx_act);
 		return (1);
 	}
 	is_dead(philo);
 	pthread_mutex_unlock(philo->table->mtx_act);
-	return (philo->table->game_over);
+	return (philo->table->is_game_over);
 }
 
-void	*monitoring(void *arg)
+void	*monitoring(void *table_ptr)
 {
 	t_table	*table;
-	size_t		i;
+	size_t	i;
 
-	table = (t_table *)arg;
-	while (atomic_get(table->mtx_act, &table->init_time) == 0)
-		continue ;
-	if (table->init_time == -1)
+	table = (t_table *)table_ptr;
+	if (atomic_get(table->mtx_act, &table->timing.start) == -1)
 		return (NULL);
 	ft_usleep(30, table);
 	while (true)
